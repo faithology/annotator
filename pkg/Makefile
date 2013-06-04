@@ -23,19 +23,13 @@ PLUGINS=\
 	plugin/permissions.coffee \
 	plugin/store.coffee \
 	plugin/tags.coffee \
-	plugin/unsupported.coffee
+	plugin/unsupported.coffee \
+	plugin/marginviewer.coffee
 
 ANNOTATOR_FULL=\
 	$(ANNOTATOR) \
 	plugin/unsupported.coffee \
-	plugin/auth.coffee \
-	plugin/store.coffee \
-	plugin/permissions.coffee \
-	plugin/annotateitpermissions.coffee \
-	plugin/filter.coffee \
-	plugin/markdown.coffee \
-	plugin/tags.coffee \
-	plugin/kitchensink.coffee
+	plugin/store.coffee
 
 BOOKMARKLET=\
 	$(ANNOTATOR) \
