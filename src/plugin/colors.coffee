@@ -3,7 +3,8 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
 
   options:
     # Configurable default highlight color in RGBA or Hex
-    defaultColor: 'rgba(255, 255, 10, 0.3)'
+    defaultColor: 'rgba(255, 255, 10, 0.3)',
+    colorOptions: ['rgba(255, 255, 10, 0.3)', 'rgba(10, 255, 10, 0.3)', 'rgba(255, 10, 10, 0.3)', 'rgba(255, 10, 255, 0.3)', 'rgba(10, 255, 255, 0.3)', 'rgba(10, 10, 255, 0.3)']
 
   # The field element added to the Annotator.Editor wrapped in jQuery. Cached to
   # save having to recreate it everytime the editor is displayed.
@@ -52,7 +53,16 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   updateField: (field, annotation) =>
     value = if annotation.color then annotation.color else @options.defaultColor
 
-    @input.val(value)
+    options = $.map(@options.colorOptions, (option) ->
+      '<span class="annotator-color-option" style="background-color: ' + Annotator.Util.escape(option) + '" data-color="' + Annotator.Util.escape(option) + '"></span>'
+    ).join(' ')
+
+    options = '<span class="annotator-color-options">' + options + '</span>'
+
+    @input.closest('li').find('.annotator-color-options').remove();
+
+    @input.after(options);
+    @input.val(value).attr "type", "hidden"
 
   # Annotator.Editor callback function. Updates the annotation field with the
   # data retrieved from the @input property.
@@ -70,8 +80,6 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   #
   # Returns nothing.
   setAnnotationColor: (field, annotation) =>
-    console.log(annotation);
-    console.log(@input.val());
     annotation.color = @input.val()
 
   # Annotator.Viewer callback function. Updates the annotation display with the color.
