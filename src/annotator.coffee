@@ -152,7 +152,7 @@ class Annotator extends Delegator
       .on('save', this.onEditorSubmit)
       .addField({
         type: 'textarea',
-        label: _t('Comments') + '\u2026'
+        label: _t('Begin your note here') + '\u2026'
         load: (field, annotation) ->
           $(field).find('textarea').val(annotation.text || '')
         submit: (field, annotation) ->
