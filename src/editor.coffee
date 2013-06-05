@@ -3,11 +3,13 @@ class Annotator.Editor extends Annotator.Widget
 
   # Events to be bound to @element.
   events:
-    "form submit":                 "submit"
-    ".annotator-save click":       "submit"
-    ".annotator-cancel click":     "hide"
-    ".annotator-cancel mouseover": "onCancelButtonMouseover"
-    "textarea keydown":            "processKeypress"
+    "form submit":                      "submit"
+    ".annotator-save click":            "submit"
+    ".annotator-cancel click":          "hide"
+    ".annotator-cancel mouseover":      "onCancelButtonMouseover"
+    "textarea keydown":                 "processKeypress"
+    ".annotator-menu .highlight click": "_onHighlightClick"
+    ".annotator-menu .note click":      "_onNoteClick"
 
   # Classes to toggle state.
   classes:
@@ -17,6 +19,10 @@ class Annotator.Editor extends Annotator.Widget
   # HTML template for @element.
   html: """
         <div class="annotator-outer annotator-editor">
+          <ul class="annotator-menu">
+            <li class="highlight">Highlight</li>
+            <li class="note">Note</li>
+          </ul>
           <form class="annotator-widget">
             <ul class="annotator-listing"></ul>
             <div class="annotator-controls">
@@ -379,3 +385,9 @@ class Annotator.Editor extends Annotator.Widget
 
     resize.bind   'mousedown', onMousedown
     controls.bind 'mousedown', onMousedown
+
+  _onNoteClick: () ->
+    console.log 'note clicked'
+
+  _onHighlightClick: () ->
+    console.log 'highlight clicked'
