@@ -130,9 +130,9 @@ class Annotator extends Delegator
       .addField({
         load: (field, annotation) =>
           if annotation.text
-            $(field).html(Util.escape(annotation.text))
+            $(field).addClass("not-empty").html(Util.escape(annotation.text))
           else
-            $(field).html("<i>#{_t 'No Comment'}</i>")
+            $(field).addClass("empty").html('&nbsp;')
           this.publish('annotationViewerTextField', [field, annotation])
       })
       .element.appendTo(@wrapper).bind({
@@ -569,9 +569,8 @@ class Annotator extends Delegator
       return if this.isAnnotator(container)
 
     if event and @selectedRanges.length
-      @adder
-        .css(util.mousePosition(event, @wrapper[0]))
-        .show()
+      @adder.css(util.mousePosition(event, @wrapper[0])).show()
+      @onAdderClick()
     else
       @adder.hide()
 
