@@ -42,7 +42,7 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   # field      - The color field Element containing the input Element.
   # annotation - An annotation object to be edited.
   updateField: (field, annotation) =>
-    value = annotation.color
+    value = (if annotation.color then annotation.color else @options.colorOptions[0])
 
     unless @input.closest('li').find('.annotator-color-options').length
       options = $.map(@options.colorOptions, (color) ->
@@ -72,10 +72,9 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   # annotation - An annotation object to be display.
   updateViewer: (field, annotation) ->
     field = $(field)
-    field.addClass('annotator-color')
 
-    if annotation.color
-      field.css("background-color", annotation.color).html annotation.color
+    color = (if annotation.color then annotation.color else @options.colorOptions[0])
+    field.addClass('annotator-color').css('background-color', color).html color
 
   setAllHighlights: (annotations) ->
     for annotation in annotations
