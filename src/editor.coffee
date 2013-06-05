@@ -19,11 +19,11 @@ class Annotator.Editor extends Annotator.Widget
   # HTML template for @element.
   html: """
         <div class="annotator-outer annotator-editor">
-          <ul class="annotator-menu">
-            <li class="highlight">Highlight</li>
-            <li class="note">Note</li>
-          </ul>
           <form class="annotator-widget">
+            <ul class="annotator-menu">
+              <li class="highlight">Highlight</li>
+              <li class="note">Note</li>
+            </ul>
             <ul class="annotator-listing"></ul>
             <div class="annotator-controls">
               <a href="#cancel" class="annotator-cancel">""" + _t('Cancel') + """</a>
@@ -260,7 +260,7 @@ class Annotator.Editor extends Annotator.Widget
       element.addClass('annotator-checkbox')
       element.append($('<label />', {for: field.id, html: field.label}))
 
-    @element.find('ul:first').append(element)
+    @element.find('ul.annotator-listing:first').append(element)
 
     @fields.push field
 
@@ -269,7 +269,7 @@ class Annotator.Editor extends Annotator.Widget
   checkOrientation: ->
     super
 
-    list = @element.find('ul')
+    list = @element.find('ul.annotator-listing')
     controls = @element.find('.annotator-controls')
 
     if @element.hasClass(@classes.invert.y)
