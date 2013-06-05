@@ -1,5 +1,8 @@
 # Public: Colors plugin allows users to configure the color of the annotation
 class Annotator.Plugin.Colors extends Annotator.Plugin
+  # Events and callbacks to bind to the Colors#element.
+  events:
+    ".annotator-color-option click": "_onColorOptionClick"
 
   options:
     # Configurable default highlight color in RGBA or Hex
@@ -43,15 +46,15 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   updateField: (field, annotation) =>
     value = if annotation.color then annotation.color else @options.defaultColor
 
-    options = $.map(@options.colorOptions, (option) ->
-      '<span class="annotator-color-option" style="background-color: ' + Annotator.Util.escape(option) + '" data-color="' + Annotator.Util.escape(option) + '"></span>'
-    ).join(' ')
+    unless @input.closest('li').find('.annotator-color-options').length
+      options = $.map(@options.colorOptions, (option) ->
+        '<span class="annotator-color-option" style="background-color: ' + Annotator.Util.escape(option) + '" data-color="' + Annotator.Util.escape(option) + '"></span>'
+      ).join(' ')
 
-    options = '<span class="annotator-color-options">' + options + '</span>'
+      options = '<span class="annotator-color-options">' + options + '</span>'
 
-    @input.closest('li').find('.annotator-color-options').remove();
+      @input.after(options);
 
-    @input.after(options);
     @input.val(value).attr "type", "hidden"
 
   # Annotator.Editor callback function. Updates the annotation field with the
@@ -72,3 +75,13 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     color = if annotation.color then annotation.color else @options.defaultColor
 
     field.addClass('annotator-color').css("background-color", color).html color
+
+  # Changes the color input.
+  #
+  # event - A click Event object.
+  #
+  # Returns nothing.
+  _onColorOptionClick: (event) ->
+    color = $(event.target).data('color')
+    console.log color
+    @input.val color
