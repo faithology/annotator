@@ -20,8 +20,6 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   # Public: Initialises the plugin and adds custom fields to both the
   # annotator viewer and editor. The plugin also checks if the annotator is
   # supported by the current browser.
-  #
-  # Returns nothing.
   pluginInit: ->
     return unless Annotator.supported()
 
@@ -42,14 +40,6 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   #
   # field      - The color field Element containing the input Element.
   # annotation - An annotation object to be edited.
-  #
-  # Examples
-  #
-  #   field = $('<li><input /></li>')[0]
-  #   plugin.updateField(field, {color: '#CCCCCC'})
-  #   field.value # => Returns '#CCCCCC'
-  #
-  # Returns nothing.
   updateField: (field, annotation) =>
     value = if annotation.color then annotation.color else @options.defaultColor
 
@@ -69,16 +59,6 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   #
   # field      - The color field Element containing the input Element.
   # annotation - An annotation object to be updated.
-  #
-  # Examples
-  #
-  #   field = $('<li><input value="#CCCCCC" /></li>')[0]
-  #   annotation = {}
-  #
-  #   plugin.setAnnotationTags(field, annotation)
-  #   annotation.color # => Returns '#CCCCCC'
-  #
-  # Returns nothing.
   setAnnotationColor: (field, annotation) =>
     annotation.color = @input.val()
 
@@ -86,14 +66,6 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   #
   # field      - The Element to populate with the color.
   # annotation - An annotation object to be display.
-  #
-  # Examples
-  #
-  #   field = $('<div />')[0]
-  #   plugin.updateField(field, {color: '#CCCCCC'})
-  #   field.innerHTML # => Returns '<span class="annotator-color" style="background-color: #CCCCCC">#CCCCCC</span>'
-  #
-  # Returns nothing.
   updateViewer: (field, annotation) ->
     field = $(field)
 
