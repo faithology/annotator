@@ -24,11 +24,11 @@ PLUGINS=\
 	plugin/store.coffee \
 	plugin/tags.coffee \
 	plugin/unsupported.coffee \
-	plugin/marginviewer.coffee
+	plugin/marginviewer.coffee \
+	plugin/colors.coffee
 
 ANNOTATOR_FULL=\
 	$(ANNOTATOR) \
-	plugin/unsupported.coffee \
 	plugin/store.coffee
 
 BOOKMARKLET=\

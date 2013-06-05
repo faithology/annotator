@@ -70,7 +70,7 @@ class Annotator.Plugin.Store extends Annotator.Plugin
       destroy: '/annotations/:id'
       search:  '/search'
 
-  # Public: The contsructor initailases the Store instance. It requires the
+  # Public: The contsructor initializes the Store instance. It requires the
   # Annotator#element and an Object of options.
   #
   # element - This must be the Annotator#element in order to listen for events.
