@@ -167,6 +167,7 @@ class Annotator.Editor extends Annotator.Widget
   #
   # Returns itself.
   submit: (event) =>
+    @_hideFormElements()
     util.preventEventDefault event
 
     for field in @fields
@@ -272,10 +273,7 @@ class Annotator.Editor extends Annotator.Widget
     list = @element.find('ul.annotator-listing')
     controls = @element.find('.annotator-controls')
 
-    if @element.hasClass(@classes.invert.y)
-      controls.insertBefore(list)
-    else if controls.is(':first-child')
-      controls.insertAfter(list)
+    controls.insertAfter(list)
 
     this
 
@@ -386,8 +384,13 @@ class Annotator.Editor extends Annotator.Widget
     resize.bind   'mousedown', onMousedown
     controls.bind 'mousedown', onMousedown
 
+  _hideFormElements: () ->
+    @element.find('.annotator-item').hide()
+
   _onNoteClick: () ->
-    console.log 'note clicked'
+    @_hideFormElements()
+    @element.find('.annotator-item:first').show()
 
   _onHighlightClick: () ->
-    console.log 'highlight clicked'
+    @_hideFormElements()
+    @element.find('.annotator-item:last').show()
