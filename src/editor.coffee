@@ -110,6 +110,7 @@ class Annotator.Editor extends Annotator.Widget
   #
   # Returns itself.
   hide: (event) =>
+    @_hideFormElements()
     util.preventEventDefault event
 
     @element.addClass(@classes.hide)
