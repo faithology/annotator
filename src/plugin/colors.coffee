@@ -8,6 +8,7 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     'annotationUpdated'            : 'setHighlight'
 
   options:
+    defaultColor: 'rgba(255, 255, 10, 0.3)'
     colorOptions: ['rgba(255, 255, 10, 0.3)', 'rgba(10, 255, 10, 0.3)', 'rgba(255, 10, 10, 0.3)', 'rgba(255, 10, 255, 0.3)', 'rgba(10, 255, 255, 0.3)', 'rgba(10, 10, 255, 0.3)']
 
   # The field element added to the Annotator.Editor wrapped in jQuery. Cached to
@@ -42,19 +43,23 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   # field      - The color field Element containing the input Element.
   # annotation - An annotation object to be edited.
   updateField: (field, annotation) =>
-    value = (if annotation.color then annotation.color else @options.colorOptions[0])
+    value = (if annotation.color then annotation.color else @options.defaultColor)
+    _this = this
+    className = undefined
 
     unless @input.closest('li').find('.annotator-color-options').length
-      options = $.map(@options.colorOptions, (color) ->
+      colors = $.map(@options.colorOptions, (color) ->
         color = Annotator.Util.escape(color)
-        active = ''
-        active = 'active' if value is color
-        '<span class="annotator-color-option ' + active + '" style="background-color: ' + color + '" data-color="' + color + '"></span>'
+        active = (if value is color then 'active' else '')
+        className = _this.slugify color
+        '<span class="annotator-color-option ' + className + ' ' + active + '" style="background-color: ' + color + '" data-color="' + color + '"></span>'
       ).join(' ')
 
-      options = '<span class="annotator-color-options">' + options + '</span>'
+      colors = '<span class="annotator-color-options">' + colors + '</span>'
 
-      @input.after(options);
+      @input.after(colors);
+    else
+      @markActiveSwatch(value)
 
     @input.val(value).attr "type", "hidden"
 
@@ -72,9 +77,7 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   # annotation - An annotation object to be display.
   updateViewer: (field, annotation) ->
     field = $(field)
-
-    color = (if annotation.color then annotation.color else @options.colorOptions[0])
-    field.addClass('annotator-color').css('background-color', color).html color
+    field.addClass('annotator-color')
 
   setAllHighlights: (annotations) ->
     for annotation in annotations
@@ -95,7 +98,15 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   # Returns nothing.
   _onColorOptionClick: (event) ->
     color = $(event.target).data('color')
+    @markActiveSwatch(color)
+    @input.val color
+
+  markActiveSwatch: (activeColor) ->
+    className = @slugify activeColor
     $parent = @input.closest('li').find '.annotator-color-options'
     $parent.find('.annotator-color-option').removeClass 'active'
-    $parent.find('.annotator-color-option[data-color="' + color + '"]')
-    @input.val color
+    $parent.find('.annotator-color-option.' + className).addClass 'active'
+
+  # converts the string into a format that can be used as a css class
+  slugify: (string) ->
+    string.replace /[\W]*/g, ''
