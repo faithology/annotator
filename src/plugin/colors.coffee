@@ -8,8 +8,15 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     'annotationUpdated'            : 'setHighlight'
 
   options:
-    defaultColor: 'rgba(255, 255, 10, 0.3)'
-    colorOptions: ['rgba(255, 255, 10, 0.3)', 'rgba(10, 255, 10, 0.3)', 'rgba(255, 10, 10, 0.3)', 'rgba(255, 10, 255, 0.3)', 'rgba(10, 255, 255, 0.3)', 'rgba(10, 10, 255, 0.3)']
+    defaultColor: 'rgba(255, 255, 0, 0.3)'  # yellow
+    colorOptions: [
+      'rgba(255, 255, 0, 0.3)',  # yellow
+      'rgba(255, 89, 0, 0.3)',   # orange
+      'rgba(255, 107, 247, 0.3)',# pink
+      'rgba(0, 230, 0, 0.3)',    # green
+      'rgba(0, 64, 255, 0.3)',   # blue
+      'rgba(128, 0, 128, 0.3)'   # purple
+    ]
 
   # The field element added to the Annotator.Editor wrapped in jQuery. Cached to
   # save having to recreate it everytime the editor is displayed.
