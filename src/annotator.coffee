@@ -364,7 +364,9 @@ class Annotator extends Delegator
   #     annotator.loadAnnotations(annotations)
   #
   # Returns itself for chaining.
-  loadAnnotations: (annotations=[]) ->
+  loadAnnotations: (annotations=[], cb) ->
+    cb = cb or ->
+
     loader = (annList=[]) =>
       now = annList.splice(0,10)
 
@@ -377,6 +379,8 @@ class Annotator extends Delegator
         setTimeout((-> loader(annList)), 10)
       else
         this.publish 'annotationsLoaded', [clone]
+
+      cb()
 
     clone = annotations.slice()
     loader(annotations) if annotations.length

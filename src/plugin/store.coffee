@@ -70,6 +70,9 @@ class Annotator.Plugin.Store extends Annotator.Plugin
       destroy: '/annotations/:id'
       search:  '/search'
 
+    # function that is called when the pages annotations have finished loading
+    onLoadCallback: () ->
+
   # Public: The contsructor initializes the Store instance. It requires the
   # Annotator#element and an Object of options.
   #
@@ -273,7 +276,7 @@ class Annotator.Plugin.Store extends Annotator.Plugin
         newData.push(a)
 
     @annotations = @annotations.concat(newData)
-    @annotator.loadAnnotations(newData.slice()) # Clone array
+    @annotator.loadAnnotations(newData.slice(), @options.onLoadCallback) # Clone array
 
   # Public: Performs the same task as Store.#loadAnnotations() but calls the
   # 'search' URI with an optional query string.
