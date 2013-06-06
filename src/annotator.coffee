@@ -375,11 +375,15 @@ class Annotator extends Delegator
       # responsiveness).
       if annList.length > 0
         setTimeout((-> loader(annList)), 10)
+        console.log 'here3'
       else
         this.publish 'annotationsLoaded', [clone]
 
     clone = annotations.slice()
-    loader(annotations) if annotations.length
+    if annotations.length
+      loader(annotations)
+    else
+      this.publish 'annotationsLoaded', [clone]
     this
 
   # Public: Calls the Store#dumpAnnotations() method.
