@@ -21,6 +21,7 @@ class Annotator.Plugin.Store extends Annotator.Plugin
   # - annotationUpdated: An annotation has been updated.
   # - annotationDeleted: An annotation has been deleted.
   events:
+    'annotationsLoaded': 'annotationsLoaded'
     'annotationCreated': 'annotationCreated'
     'annotationDeleted': 'annotationDeleted'
     'annotationUpdated': 'annotationUpdated'
@@ -119,6 +120,9 @@ class Annotator.Plugin.Store extends Annotator.Plugin
       this.loadAnnotationsFromSearch(@options.loadFromSearch)
     else
       this.loadAnnotations()
+
+  annotationsLoaded: (annotations) =>
+    @options.onLoadCallback()
 
   # Public: Callback method for annotationCreated event. Receives an annotation
   # and sends a POST request to the sever using the URI for the "create" action.
@@ -276,7 +280,7 @@ class Annotator.Plugin.Store extends Annotator.Plugin
         newData.push(a)
 
     @annotations = @annotations.concat(newData)
-    @annotator.loadAnnotations(newData.slice(), @options.onLoadCallback) # Clone array
+    @annotator.loadAnnotations(newData.slice()) # Clone array
 
   # Public: Performs the same task as Store.#loadAnnotations() but calls the
   # 'search' URI with an optional query string.
