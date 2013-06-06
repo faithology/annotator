@@ -482,17 +482,10 @@ class Annotator.Plugin.Store extends Annotator.Plugin
   # Returns nothing.
   _onError: (xhr) =>
     action  = xhr._action
-    message = Annotator._t("Sorry we could not ") + action + Annotator._t(" this annotation")
+    message = Annotator._t("An error has occurred. Please try again later.")
 
-    if xhr._action == 'search'
-      message = Annotator._t("Sorry we could not search the store for annotations")
-    else if xhr._action == 'read' && !xhr._id
-      message = Annotator._t("Sorry we could not ") + action + Annotator._t(" the annotations from the store")
-
-    switch xhr.status
-      when 401 then message = Annotator._t("Sorry you are not allowed to ") + action + Annotator._t(" this annotation")
-      when 404 then message = Annotator._t("Sorry we could not connect to the annotations store")
-      when 500 then message = Annotator._t("Sorry something went wrong with the annotation store")
+    if xhr.status is 401
+      message = Annotator._t("Insufficient priviledges.")
 
     Annotator.showNotification message, Annotator.Notification.ERROR
 
