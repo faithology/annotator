@@ -8,6 +8,7 @@ class Annotator.Editor extends Annotator.Widget
     ".annotator-cancel click":          "hide"
     ".annotator-cancel mouseover":      "onCancelButtonMouseover"
     "textarea keydown":                 "processKeypress"
+    "show": "_onHighlightClick"
     ".annotator-menu .highlight click": "_onHighlightClick"
     ".annotator-menu .note click":      "_onNoteClick"
 
@@ -116,7 +117,6 @@ class Annotator.Editor extends Annotator.Widget
   #
   # Returns itself.
   hide: (event) =>
-    @_onHighlightClick()
     util.preventEventDefault event
 
     @element.addClass(@classes.hide)
@@ -174,7 +174,6 @@ class Annotator.Editor extends Annotator.Widget
   #
   # Returns itself.
   submit: (event) =>
-    @_onHighlightClick()
     util.preventEventDefault event
 
     for field in @fields
@@ -393,11 +392,15 @@ class Annotator.Editor extends Annotator.Widget
 
   _hideFormElements: () ->
     @element.find('.annotator-item').hide()
+    @element.find('.annotator-menu li').removeClass 'active'
 
   _onHighlightClick: () ->
     @_hideFormElements()
+    @element.find('.annotator-menu .highlight').addClass 'active'
     @element.find('.annotator-item:last').show()
 
   _onNoteClick: () ->
     @_hideFormElements()
+    @element.find('.annotator-menu .note').addClass 'active'
     @element.find('.annotator-item:first').show()
+
