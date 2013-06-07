@@ -63,7 +63,7 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
         '<span class="annotator-color-option ' + className + ' ' + active + '" style="background-color: ' + color.replace(/[\d\.]+(\))$/, '1$1') + '" data-color="' + color + '"></span>'
       ).join(' ')
 
-      colors = '<span class="annotator-color-options">' + colors + '</span>'
+      colors = '<div class="annotator-color-options"><p>Select the highlight color.</p>' + colors + '</div>'
 
       @input.after(colors);
     else
