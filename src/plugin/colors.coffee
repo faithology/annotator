@@ -8,14 +8,15 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     'annotationUpdated'            : 'setHighlight'
 
   options:
-    defaultColor: 'rgba(255, 255, 0, 0.3)'  # yellow
+    defaultColor: 'transparent',
     colorOptions: [
-      'rgba(255, 255, 0, 0.3)',  # yellow
-      'rgba(255, 89, 0, 0.3)',   # orange
-      'rgba(255, 107, 247, 0.3)',# pink
-      'rgba(0, 230, 0, 0.3)',    # green
-      'rgba(0, 64, 255, 0.3)',   # blue
-      'rgba(128, 0, 128, 0.3)'   # purple
+      'transparent',
+      'rgba(255, 255, 0, 0.3)',   # yellow
+      'rgba(255, 89, 0, 0.3)',    # orange
+      'rgba(255, 107, 247, 0.3)', # pink
+      'rgba(0, 230, 0, 0.3)',     # green
+      'rgba(0, 64, 255, 0.3)',    # blue
+      'rgba(128, 0, 128, 0.3)'    # purple
     ]
 
   # The field element added to the Annotator.Editor wrapped in jQuery. Cached to
@@ -59,7 +60,7 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
         color = Annotator.Util.escape(color)
         active = (if value is color then 'active' else '')
         className = _this.slugify color
-        '<span class="annotator-color-option ' + className + ' ' + active + '" style="background-color: ' + color + '" data-color="' + color + '"></span>'
+        '<span class="annotator-color-option ' + className + ' ' + active + '" style="background-color: ' + color.replace(/[\d\.]+(\))$/, '1$1') + '" data-color="' + color + '"></span>'
       ).join(' ')
 
       colors = '<span class="annotator-color-options">' + colors + '</span>'
