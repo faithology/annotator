@@ -92,11 +92,12 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
       @setHighlight annotation
     annotations
 
-  setHighlight: (annotation) ->
+  setHighlight: (annotation) =>
     color = annotation.color
     if color
       for highlight in annotation.highlights
         highlight.style.backgroundColor = color
+        highlight.className = highlight.className + ' ' + @slugify(color)
     annotation
 
   # Changes the color input.

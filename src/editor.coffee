@@ -21,13 +21,19 @@ class Annotator.Editor extends Annotator.Widget
         <div class="annotator-outer annotator-editor">
           <form class="annotator-widget">
             <ul class="annotator-menu">
-              <li class="highlight">Highlight</li>
-              <li class="note">Note</li>
+              <li class="highlight active">
+                <span class='icon ficon-note'></span>
+                <span class='text'>Highlight</span>
+              </li>
+              <li class="note">
+                <span class='icon ficon-note'></span>
+                <span class='text'>Note</span>
+              </li>
             </ul>
             <ul class="annotator-listing"></ul>
             <div class="annotator-controls">
-              <a href="#cancel" class="annotator-cancel">""" + _t('Cancel') + """</a>
-              <a href="#save" class="annotator-save annotator-focus">""" + _t('Save') + """</a>
+              <a href="#cancel" class="annotator-cancel ficon-close" title="cancel"></a>
+              <a href="#save" class="annotator-save ficon-save" title="save"></a>
             </div>
           </form>
         </div>
@@ -110,7 +116,7 @@ class Annotator.Editor extends Annotator.Widget
   #
   # Returns itself.
   hide: (event) =>
-    @_hideFormElements()
+    @_onHighlightClick()
     util.preventEventDefault event
 
     @element.addClass(@classes.hide)
@@ -168,7 +174,7 @@ class Annotator.Editor extends Annotator.Widget
   #
   # Returns itself.
   submit: (event) =>
-    @_hideFormElements()
+    @_onHighlightClick()
     util.preventEventDefault event
 
     for field in @fields
@@ -388,10 +394,10 @@ class Annotator.Editor extends Annotator.Widget
   _hideFormElements: () ->
     @element.find('.annotator-item').hide()
 
-  _onNoteClick: () ->
-    @_hideFormElements()
-    @element.find('.annotator-item:first').show()
-
   _onHighlightClick: () ->
     @_hideFormElements()
     @element.find('.annotator-item:last').show()
+
+  _onNoteClick: () ->
+    @_hideFormElements()
+    @element.find('.annotator-item:first').show()

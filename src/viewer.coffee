@@ -21,9 +21,8 @@ class Annotator.Viewer extends Annotator.Widget
     item:   """
             <li class="annotator-annotation annotator-item">
               <span class="annotator-controls">
-                <a href="#" title="View as webpage" class="annotator-link">View as webpage</a>
-                <button title="Edit" class="annotator-edit">Edit</button>
-                <button title="Delete" class="annotator-delete">Delete</button>
+                <button title="Edit" class="annotator-edit ficon-check"></button>
+                <button title="Delete" class="annotator-delete ficon-trash"></button>
               </span>
             </li>
             """
