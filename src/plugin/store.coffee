@@ -241,6 +241,7 @@ class Annotator.Plugin.Store extends Annotator.Plugin
     # Update the elements with our copies of the annotation objects (e.g.
     # with ids from the server).
     $(annotation.highlights).data('annotation', annotation)
+    this.publish('annotationUpdatedFromStore', [annotation])
 
   # Public: Makes a request to the server for all annotations.
   #

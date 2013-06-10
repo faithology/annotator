@@ -6,6 +6,8 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     'annotationsLoaded'            : '_setAllHighlights'
     'annotationCreated'            : '_setHighlight'
     'annotationUpdated'            : '_setHighlight'
+    'annotationDeleted'            : '_removeHighlight'
+    'annotationUpdatedFromStore'   : '_setHighlight'
 
   options:
     defaultColor: 'transparent',
@@ -93,28 +95,35 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     annotations
 
   _setHighlight: (annotation) =>
-    text = annotation.text
-    color = annotation.color
     id = annotation.id
-    $lastHighlight = $(annotation.highlights).last()
-    highlightPosition = $lastHighlight.position()
+    if id
+      text = annotation.text
+      color = annotation.color
+      $lastHighlight = $(annotation.highlights).last()
+      highlightPosition = $lastHighlight.position()
 
-    if color
-      $(annotation.highlights).css('background-color', color).addClass @slugify(color)
+      if color
+        $(annotation.highlights).css('background-color', color).addClass @slugify(color)
 
-    $(annotation.highlights).addClass(id).removeClass 'has-note'
+      $(annotation.highlights).addClass(id).removeClass 'has-note'
 
-    #.find('annotation-note').remove()
+      @element.find('.annotation-note.' + id).remove()
 
-    if text
-      $(annotation.highlights).addClass 'has-note'
+      if text
+        $(annotation.highlights).addClass 'has-note'
 
-      if highlightPosition
-        $noteIcon = $('<a class="annotation-note ficon-note" data-id="' + id + '" href="#"></a>').css 'top', highlightPosition.top
-        $noteIcon.mouseover @_onNoteIconHover
-        $noteIcon.mouseout @_onNoteIconHover
-        $noteIcon.click @_onNoteIconClick
-        $lastHighlight.before $noteIcon
+        if highlightPosition
+          $noteIcon = $('<a class="annotation-note ficon-note ' + id + '" data-id="' + id + '" href="#"></a>').css 'top', highlightPosition.top
+          $noteIcon.mouseover @_onNoteIconHover
+          $noteIcon.mouseout @_onNoteIconHover
+          $noteIcon.click @_onNoteIconClick
+          @element.append $noteIcon
+
+    annotation
+
+  _removeHighlight: (annotation) =>
+    if annotation.id
+      @element.find('.annotation-note.' + id).remove()
 
     annotation
 
@@ -130,10 +139,18 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
 
   _onNoteIconHover: (event) ->
     id = $(this).data 'id'
-    console.log id
-    console.log event
-    $('.annotator-hl.' + id).fadeOut 'slow'
-    $('.annotator-hl.' + id).trigger event
+    $lastHighlight = $('.annotator-hl.' + id).last()
+    console.log event.type, id
+
+    switch event.type
+      when 'mouseout'
+        $('.annotator-hl.' + id).removeClass 'hovering'
+      when 'mouseover'
+        $('.annotator-hl.' + id).addClass 'hovering'
+
+    $lastHighlight.trigger event.type
+    console.log 'Trigger the mouse event on:'
+    console.log $lastHighlight
 
   _onNoteIconClick: (event) ->
     event?.preventDefault?()

@@ -375,7 +375,6 @@ class Annotator extends Delegator
       # responsiveness).
       if annList.length > 0
         setTimeout((-> loader(annList)), 10)
-        console.log 'here3'
       else
         this.publish 'annotationsLoaded', [clone]
 
