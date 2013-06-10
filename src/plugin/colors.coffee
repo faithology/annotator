@@ -140,7 +140,6 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   _onNoteIconHover: (event) =>
     id = $(event.target).data 'id'
     $lastHighlight = $('.annotator-hl.' + id).last()
-    console.log event.type, id
 
     switch event.type
       when 'mouseout'
