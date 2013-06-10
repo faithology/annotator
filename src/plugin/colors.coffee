@@ -122,7 +122,9 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     annotation
 
   _removeHighlight: (annotation) =>
-    if annotation.id
+    id = annotation.id
+
+    if id
       @element.find('.annotation-note.' + id).remove()
 
     annotation
