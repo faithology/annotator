@@ -600,7 +600,12 @@ class Annotator extends Delegator
   # event - A mouseover Event object.
   #
   # Returns nothing.
-  onHighlightMouseover: (event) =>
+  onHighlightMouseover: (e, otherEvent) =>
+    event = e
+
+    if otherEvent?
+      event = otherEvent
+
     # Cancel any pending hiding of the viewer.
     this.clearViewerHideTimer()
 
@@ -608,7 +613,7 @@ class Annotator extends Delegator
     # already displaying the viewer
     return false if @mouseIsDown or @viewer.isShown()
 
-    annotations = $(event.target)
+    annotations = $(e.target)
       .parents('.annotator-hl')
       .andSelf()
       .map -> return $(this).data("annotation")

@@ -137,8 +137,8 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     @markActiveSwatch(color)
     @input.val color
 
-  _onNoteIconHover: (event) ->
-    id = $(this).data 'id'
+  _onNoteIconHover: (event) =>
+    id = $(event.target).data 'id'
     $lastHighlight = $('.annotator-hl.' + id).last()
     console.log event.type, id
 
@@ -148,9 +148,7 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
       when 'mouseover'
         $('.annotator-hl.' + id).addClass 'hovering'
 
-    $lastHighlight.trigger event.type
-    console.log 'Trigger the mouse event on:'
-    console.log $lastHighlight
+    $lastHighlight.trigger event.type, event
 
   _onNoteIconClick: (event) ->
     event?.preventDefault?()
