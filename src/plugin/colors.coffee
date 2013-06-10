@@ -3,9 +3,9 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   # Events and callbacks to bind to the Colors#element.
   events:
     '.annotator-color-option click': '_onColorOptionClick'
-    'annotationsLoaded'            : 'setAllHighlights'
-    'annotationCreated'            : 'setHighlight'
-    'annotationUpdated'            : 'setHighlight'
+    'annotationsLoaded'            : '_setAllHighlights'
+    'annotationCreated'            : '_setHighlight'
+    'annotationUpdated'            : '_setHighlight'
 
   options:
     defaultColor: 'transparent',
@@ -87,17 +87,35 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     field = $(field)
     field.addClass('annotator-color')
 
-  setAllHighlights: (annotations) ->
+  _setAllHighlights: (annotations) ->
     for annotation in annotations
-      @setHighlight annotation
+      @_setHighlight annotation
     annotations
 
-  setHighlight: (annotation) =>
+  _setHighlight: (annotation) =>
+    text = annotation.text
     color = annotation.color
+    id = annotation.id
+    $lastHighlight = $(annotation.highlights).last()
+    highlightPosition = $lastHighlight.position()
+
     if color
-      for highlight in annotation.highlights
-        highlight.style.backgroundColor = color
-        highlight.className = highlight.className + ' ' + @slugify(color)
+      $(annotation.highlights).css('background-color', color).addClass @slugify(color)
+
+    $(annotation.highlights).addClass(id).removeClass 'has-note'
+
+    #.find('annotation-note').remove()
+
+    if text
+      $(annotation.highlights).addClass 'has-note'
+
+      if highlightPosition
+        $noteIcon = $('<a class="annotation-note ficon-note" data-id="' + id + '" href="#"></a>').css 'top', highlightPosition.top
+        $noteIcon.mouseover @_onNoteIconHover
+        $noteIcon.mouseout @_onNoteIconHover
+        $noteIcon.click @_onNoteIconClick
+        $lastHighlight.before $noteIcon
+
     annotation
 
   # Changes the color input.
@@ -109,6 +127,16 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     color = $(event.target).data('color')
     @markActiveSwatch(color)
     @input.val color
+
+  _onNoteIconHover: (event) ->
+    id = $(this).data 'id'
+    console.log id
+    console.log event
+    $('.annotator-hl.' + id).fadeOut 'slow'
+    $('.annotator-hl.' + id).trigger event
+
+  _onNoteIconClick: (event) ->
+    event?.preventDefault?()
 
   markActiveSwatch: (activeColor) ->
     className = @slugify activeColor
