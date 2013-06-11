@@ -567,8 +567,6 @@ class Annotator extends Delegator
     @selectedRanges = this.getSelectedRanges()
 
     # if there is a selection, remove the tooltips as to not interfere with the ranges
-    # <span data-id="51b75b5c023d1900000008ac" class="dictionary-link link-text needs-tooltip">Holocaust</span>
-    # <span class="tooltip no-link"><span data-id="51b75b5c023d1900000008ac" class="dictionary-link link-text">Holocaust</span><span class="tooltip-content">...</span></span>
     if event and @selectedRanges.length
       $('.article-paragraphs .tooltip').each ->
         $(this).find('.tooltip-content').remove()
@@ -576,6 +574,7 @@ class Annotator extends Delegator
 
       @selectedRanges = this.getSelectedRanges()
 
+      # now rebuild the tooltips!
       window.tooltipify();
 
     for range in @selectedRanges
