@@ -206,7 +206,7 @@ class Annotator.Plugin.Store extends Annotator.Plugin
   # NB: registerAnnotation and unregisterAnnotation do no error-checking/
   # duplication avoidance of their own. Use with care.
   #
-  # annotation - An annotation Object to unresister.
+  # annotation - An annotation Object to unregister.
   #
   # Examples
   #
@@ -215,6 +215,15 @@ class Annotator.Plugin.Store extends Annotator.Plugin
   # Returns remaining registed annotations.
   unregisterAnnotation: (annotation) ->
     @annotations.splice(@annotations.indexOf(annotation), 1)
+
+
+  removeAnnotations: () ->
+
+    for annotation in @annotations
+      if annotation.highlights?
+        for h in annotation.highlights when h.parentNode?
+          child = h.childNodes[0]
+          $(h).replaceWith(h.childNodes)
 
   # Public: Extends the provided annotation with the contents of the data
   # Object. Will only extend annotations that have been registered with the
