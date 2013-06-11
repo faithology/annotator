@@ -43,7 +43,6 @@ class Annotator extends Delegator
     ".annotator-adder button mousedown": "onAdderMousedown"
     ".annotator-hl mouseover":           "onHighlightMouseover"
     ".annotator-hl mouseout":            "startViewerHideTimer"
-    "a.toggle-annotations click":         "toggleAnnotations"
 
   html:
     adder:   '<div class="annotator-adder"><button>' + _t('Annotate') + '</button></div>'
@@ -726,9 +725,6 @@ class Annotator extends Delegator
 
     # Delete highlight elements.
     this.deleteAnnotation annotation
-
-  toggleAnnotations: (event) ->
-    alert 'hiding annotations feature coming soon'
 
 # Create namespace for Annotator plugins
 class Annotator.Plugin extends Delegator
