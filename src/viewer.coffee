@@ -21,7 +21,7 @@ class Annotator.Viewer extends Annotator.Widget
     item:   """
             <li class="annotator-annotation annotator-item">
               <span class="annotator-controls">
-                <button title="Edit" class="annotator-edit ficon-check"></button>
+                <button title="Edit" class="annotator-edit ficon-highlighter"></button>
                 <button title="Delete" class="annotator-delete ficon-trash"></button>
               </span>
             </li>

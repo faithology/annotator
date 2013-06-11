@@ -23,7 +23,7 @@ class Annotator.Editor extends Annotator.Widget
           <form class="annotator-widget">
             <ul class="annotator-menu">
               <li class="highlight active">
-                <span class='icon ficon-note'></span>
+                <span class='icon ficon-highlighter'></span>
                 <span class='text'>Highlight</span>
               </li>
               <li class="note">
