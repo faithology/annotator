@@ -225,6 +225,10 @@ class Annotator.Plugin.Store extends Annotator.Plugin
           child = h.childNodes[0]
           $(h).replaceWith(h.childNodes)
 
+    $('.annotation-note').remove()
+    @annotations = []
+
+
   # Public: Extends the provided annotation with the contents of the data
   # Object. Will only extend annotations that have been registered with the
   # store. Also updates the annotation object stored in the 'annotation' data
