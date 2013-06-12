@@ -227,6 +227,8 @@ class Annotator.Plugin.Store extends Annotator.Plugin
   # Returns remaining registed annotations.
   unregisterAnnotation: (annotation) ->
     @annotations.splice(@annotations.indexOf(annotation), 1)
+    unless @annotations.length
+      @options.onEmptyCallback()
 
 
   removeAnnotations: () ->
