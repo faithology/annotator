@@ -382,6 +382,7 @@ class Annotator extends Delegator
     if annotations.length
       loader(annotations)
     else
+      this.publish 'annotationsLoadedEmpty', []
       this.publish 'annotationsLoaded', [clone]
     this
 

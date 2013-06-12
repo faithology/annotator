@@ -21,10 +21,11 @@ class Annotator.Plugin.Store extends Annotator.Plugin
   # - annotationUpdated: An annotation has been updated.
   # - annotationDeleted: An annotation has been deleted.
   events:
-    'annotationsLoaded': 'annotationsLoaded'
-    'annotationCreated': 'annotationCreated'
-    'annotationDeleted': 'annotationDeleted'
-    'annotationUpdated': 'annotationUpdated'
+    'annotationsLoaded':      'annotationsLoaded'
+    'annotationCreated':      'annotationCreated'
+    'annotationDeleted':      'annotationDeleted'
+    'annotationUpdated':      'annotationUpdated'
+    'annotationsLoadedEmpty': 'annotationsLoadedEmpty'
 
   # User customisable options available.
   options:
@@ -73,6 +74,12 @@ class Annotator.Plugin.Store extends Annotator.Plugin
 
     # function that is called when the pages annotations have finished loading
     onLoadCallback: () ->
+
+    # function to be called if there are no annotations available
+    onEmptyCallback: () ->
+
+    # function to be called when there are annotations
+    onNonEmptyCallback: () ->
 
   # Public: The contsructor initializes the Store instance. It requires the
   # Annotator#element and an Object of options.
@@ -124,6 +131,9 @@ class Annotator.Plugin.Store extends Annotator.Plugin
   annotationsLoaded: (annotations) =>
     @options.onLoadCallback()
 
+  annotationsLoadedEmpty: () =>
+    @options.onEmptyCallback()
+
   # Public: Callback method for annotationCreated event. Receives an annotation
   # and sends a POST request to the sever using the URI for the "create" action.
   #
@@ -152,6 +162,8 @@ class Annotator.Plugin.Store extends Annotator.Plugin
       # This is called to update annotations created at load time with
       # the highlight elements created by Annotator.
       this.updateAnnotation annotation, {}
+
+    @options.onNonEmptyCallback()
 
   # Public: Callback method for annotationUpdated event. Receives an annotation
   # and sends a PUT request to the sever using the URI for the "update" action.

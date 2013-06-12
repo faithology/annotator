@@ -62,7 +62,8 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
         color = Annotator.Util.escape(color)
         active = (if value is color then 'active' else '')
         className = _this.slugify color
-        '<span class="annotator-color-option ' + className + ' ' + active + '" style="background-color: ' + color.replace(/[\d\.]+(\))$/, '1$1') + '" data-color="' + color + '"></span>'
+        colorWithNoTransparency = color.replace /[\d\.]+(\))$/, '1$1'
+        '<span class="annotator-color-option ' + className + ' ' + active + '" style="background-color: ' + colorWithNoTransparency + '" data-color="' + color + '"></span>'
       ).join(' ')
 
       colors = '<div class="annotator-color-options"><p>Select the highlight color.</p>' + colors + '</div>'
@@ -129,13 +130,13 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
 
     annotation
 
-  # Changes the color input.
-  #
-  # event - A click Event object.
-  #
-  # Returns nothing.
   _onColorOptionClick: (event) ->
     color = $(event.target).data('color')
+
+    # @TODO change the highlight color of the active annotation
+    # console.log 'change the highlight to ' + color
+    # console.log @annotation
+
     @markActiveSwatch(color)
     @input.val color
 
