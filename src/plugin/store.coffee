@@ -26,6 +26,7 @@ class Annotator.Plugin.Store extends Annotator.Plugin
     'annotationDeleted':      'annotationDeleted'
     'annotationUpdated':      'annotationUpdated'
     'annotationsLoadedEmpty': 'annotationsLoadedEmpty'
+    'annotationsLoadedFull':  'annotationsLoadedFull'
 
   # User customisable options available.
   options:
@@ -133,6 +134,9 @@ class Annotator.Plugin.Store extends Annotator.Plugin
 
   annotationsLoadedEmpty: () =>
     @options.onEmptyCallback()
+
+  annotationsLoadedFull: () =>
+    @options.onNonEmptyCallback()
 
   # Public: Callback method for annotationCreated event. Receives an annotation
   # and sends a POST request to the sever using the URI for the "create" action.

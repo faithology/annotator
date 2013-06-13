@@ -352,6 +352,7 @@ class Annotator extends Delegator
     clone = annotations.slice()
     if annotations.length
       loader(annotations)
+      this.publish 'annotationsLoadedFull', []
     else
       this.publish 'annotationsLoadedEmpty', []
       this.publish 'annotationsLoaded', [clone]
