@@ -392,16 +392,16 @@ class Annotator.Editor extends Annotator.Widget
     controls.bind 'mousedown', onMousedown
 
   _hideFormElements: () ->
-    @element.find('.annotator-item').hide()
+    @element.find('.annotator-item').not('.annotator-item-quote').hide()
     @element.find('.annotator-menu li').removeClass 'active'
 
   _onHighlightClick: () ->
     @_hideFormElements()
     @element.find('.annotator-menu .highlight').addClass 'active'
-    @element.find('.annotator-item:last').show()
+    @element.find('.annotator-color-options').parent().show()
 
   _onNoteClick: () ->
     @_hideFormElements()
     @element.find('.annotator-menu .note').addClass 'active'
-    @element.find('.annotator-item:first').show()
+    @element.find('textarea').parent().show()
 
