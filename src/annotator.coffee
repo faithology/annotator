@@ -459,6 +459,7 @@ class Annotator extends Delegator
   #
   # Returns nothing.
   onEditorHide: =>
+    console.log 'onEditorHide'
     this.publish('annotationEditorHidden', [@editor])
     @ignoreMouseup = false
 
@@ -468,6 +469,7 @@ class Annotator extends Delegator
   #
   # Returns nothing.
   onEditorSubmit: (annotation) =>
+    console.log 'onEditorSubmit', annotation
     this.publish('annotationEditorSubmit', [@editor, annotation])
 
   # Public: Loads the @viewer with an Array of annotations and positions it

@@ -404,4 +404,3 @@ class Annotator.Editor extends Annotator.Widget
     @_hideFormElements()
     @element.find('.annotator-menu .note').addClass 'active'
     @element.find('textarea').parent().show()
-
