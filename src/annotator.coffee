@@ -72,6 +72,8 @@ class Annotator extends Delegator
     # Create adder
     this.adder = $(this.html.adder).appendTo(@wrapper).hide()
 
+    Annotator._instances.push(this)
+
   # Wraps the children of @element in a @wrapper div. NOTE: This method will also
   # remove any script elements inside @element to prevent them re-executing.
   #
@@ -172,6 +174,38 @@ class Annotator extends Delegator
     ].join("\n")
 
     this
+
+  # Public: Destroy the current Annotator instance, unbinding all events and
+  # disposing of all relevant elements.
+  #
+  # Returns nothing.
+  destroy: ->
+    $(document).unbind({
+      "mouseup":   this.checkForEndSelection
+      "mousedown": this.checkForStartSelection
+    })
+
+    $('#annotator-dynamic-style').remove()
+
+    @adder.remove()
+    @viewer.destroy()
+    @editor.destroy()
+
+    @wrapper.find('.annotator-hl').each ->
+      $(this).contents().insertBefore(this)
+      $(this).remove()
+
+    @wrapper.contents().insertBefore(@wrapper)
+    @wrapper.remove()
+    @element.data('annotator', null)
+
+    for name, plugin of @plugins
+      @plugins[name].destroy()
+
+    this.removeEvents()
+    idx = Annotator._instances.indexOf(this)
+    if idx != -1
+      Annotator._instances.splice(idx, 1)
 
   # Public: Gets the current selection excluding any nodes that fall outside of
   # the @wrapper. Then returns and Array of NormalizedRange instances.
@@ -554,7 +588,7 @@ class Annotator extends Delegator
     for range in @selectedRanges
       container = range.commonAncestor
       if $(container).hasClass('annotator-hl')
-        container = $(container).parents('[class^=annotator-hl]')[0]
+        container = $(container).parents('[class!=annotator-hl]')[0]
       return if this.isAnnotator(container)
 
     if event and @selectedRanges.length
@@ -710,6 +744,9 @@ class Annotator.Plugin extends Delegator
 
   pluginInit: ->
 
+  destroy: ->
+    this.removeEvents()
+
 # Sniff the browser environment and attempt to add missing functionality.
 g = Util.getGlobal()
 
@@ -745,6 +782,9 @@ Annotator.$ = $
 Annotator.Delegator = Delegator
 Annotator.Range = Range
 Annotator.Util = Util
+
+# Expose a global instance registry
+Annotator._instances = []
 
 # Bind gettext helper so plugins can use localisation.
 Annotator._t = _t
