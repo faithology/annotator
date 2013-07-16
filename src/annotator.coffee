@@ -266,6 +266,7 @@ class Annotator extends Delegator
   #
   # Returns a newly created annotation Object.
   createAnnotation: () ->
+    console.log 'annotator.coffee createAnnotation'
     annotation = {}
     this.publish('beforeAnnotationCreated', [annotation])
     annotation
@@ -660,6 +661,7 @@ class Annotator extends Delegator
   #
   # Returns nothing.
   onAdderClick: (event) =>
+    console.log 'annotator.coffee onAdderClick'
     event?.preventDefault()
 
     # Hide the adder
