@@ -153,7 +153,7 @@ class Annotator.Plugin.Store extends Annotator.Plugin
   annotationCreated: (annotation) ->
     # Pre-register the annotation so as to save the list of highlight
     # elements.
-    console.log 'onAnnotationCreated'
+    console.log 'store onAnnotationCreated'
     if annotation not in @annotations
       this.registerAnnotation(annotation)
 
