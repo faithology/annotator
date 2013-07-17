@@ -581,7 +581,7 @@ class Annotator extends Delegator
       @selectedRanges = this.getSelectedRanges()
 
       # now rebuild the tooltips!
-      window.tooltipify();
+      window.tooltipify()
 
     for range in @selectedRanges
       container = range.commonAncestor
