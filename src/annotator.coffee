@@ -266,7 +266,6 @@ class Annotator extends Delegator
   #
   # Returns a newly created annotation Object.
   createAnnotation: () ->
-    console.log 'annotator.coffee createAnnotation'
     annotation = {}
     this.publish('beforeAnnotationCreated', [annotation])
     annotation
@@ -494,7 +493,6 @@ class Annotator extends Delegator
   #
   # Returns nothing.
   onEditorHide: =>
-    console.log 'onEditorHide'
     this.publish('annotationEditorHidden', [@editor])
     @ignoreMouseup = false
 
@@ -504,7 +502,6 @@ class Annotator extends Delegator
   #
   # Returns nothing.
   onEditorSubmit: (annotation) =>
-    console.log 'onEditorSubmit', annotation
     this.publish('annotationEditorSubmit', [@editor, annotation])
 
   # Public: Loads the @viewer with an Array of annotations and positions it
@@ -593,9 +590,10 @@ class Annotator extends Delegator
       return if this.isAnnotator(container)
 
     if event and @selectedRanges.length
-      @adder
-        .css(Util.mousePosition(event, @wrapper[0]))
-        .show()
+      # showing the adder briefly so the position for the editor will be correct
+      @adder.css(Util.mousePosition(event, @wrapper[0])).show()
+
+      # assume the user wants to annotate the selected text (user can cancel if the assumption is false)
       @onAdderClick()
     else
       @adder.hide()
@@ -661,7 +659,6 @@ class Annotator extends Delegator
   #
   # Returns nothing.
   onAdderClick: (event) =>
-    console.log 'annotator.coffee onAdderClick'
     event?.preventDefault()
 
     # Hide the adder
@@ -697,6 +694,8 @@ class Annotator extends Delegator
 
     # Display the editor.
     this.showEditor(annotation, position)
+
+    annotation
 
   # Annotator#viewer callback function. Displays the Annotator#editor in the
   # positions of the Annotator#viewer and loads the passed annotation for
