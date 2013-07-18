@@ -10,7 +10,7 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     'annotationUpdatedFromStore'   : '_setHighlight'
 
   options:
-    defaultColor: 'transparent',
+    defaultColor: 'transparent'
     colorOptions: [
       'transparent',
       'rgba(255, 255, 0, 0.3)',   # yellow
@@ -19,7 +19,9 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
       'rgba(0, 230, 0, 0.3)',     # green
       'rgba(0, 64, 255, 0.3)',    # blue
       'rgba(128, 0, 128, 0.3)'    # purple
-    ]
+    ],
+    currentArticleVersion: ''
+    userHasBeenAlertedOfVersionChange: false
 
   # The field element added to the Annotator.Editor wrapped in jQuery. Cached to
   # save having to recreate it everytime the editor is displayed.
@@ -97,7 +99,12 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
 
   _setHighlight: (annotation) =>
     id = annotation.id
+
     if id
+      if @options.currentArticleVersion.toString() != annotation.article_version.toString() and not @options.userHasBeenAlertedOfVersionChange
+        @options.userHasBeenAlertedOfVersionChange = true;
+        alert 'You annotated a previous version of this article. We have taken our best guess at the placement of your annotations. Please review them and make any necessary changes.'
+
       text = annotation.text
       color = annotation.color
       $lastHighlight = $(annotation.highlights).last()
@@ -132,10 +139,6 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
 
   _onColorOptionClick: (event) ->
     color = $(event.target).data('color')
-
-    # @TODO change the highlight color of the active annotation
-    # console.log 'change the highlight to ' + color
-    # console.log @annotation
 
     @markActiveSwatch(color)
     @input.val color
