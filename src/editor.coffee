@@ -393,6 +393,7 @@ class Annotator.Editor extends Annotator.Widget
 
   _hideFormElements: () ->
     @element.find('.annotator-item').not('.annotator-item-quote').hide()
+    @element.find('.annotator-item.tags').show()
     @element.find('.annotator-menu li').removeClass 'active'
 
   _onHighlightClick: () ->

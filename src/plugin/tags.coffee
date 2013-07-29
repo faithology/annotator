@@ -40,6 +40,8 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
       submit: this.setAnnotationTags
     })
 
+    $(@field).addClass 'tags'
+
     @annotator.viewer.addField({
       load: this.updateViewer
     })
