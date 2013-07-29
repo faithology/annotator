@@ -30,7 +30,8 @@ PLUGINS=\
 ANNOTATOR_FULL=\
 	$(ANNOTATOR) \
 	plugin/store.coffee \
-	plugin/colors.coffee
+	plugin/colors.coffee \
+	plugin/tags.coffee
 
 BOOKMARKLET=\
 	$(ANNOTATOR) \
