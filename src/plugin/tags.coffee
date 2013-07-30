@@ -46,12 +46,15 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
     url = if @options.prefix? then @options.prefix else ''
     url += @options.urls.read
 
+    options = @options
+
     $.get url, (data) ->
       if data.ok and data.tags.length
-        @options.availableTags = data.tags
+        options.availableTags = data.tags
 
     @field = @annotator.editor.addField({
-      label:  Annotator._t('Enter a folder name') + '\u2026'
+      label:  Annotator._t('Enter a folder name')
+      type:   'select'
       load:   this.updateField
       submit: this.setAnnotationTags
     })
@@ -113,8 +116,19 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
   updateField: (field, annotation) =>
     value = ''
     value = this.stringifyTags(annotation.tags) if annotation.tags
+    value = 'Default' if value == ''
 
-    @input.val(value)
+    if @input.is('select')
+      @input.empty()
+      thisInput = @input
+
+      @options.availableTags.forEach (tag) ->
+        option = $('<option />').text(tag).attr 'name', tag
+        option.attr 'selected', 'selected' if tag == value
+        thisInput.append option
+
+    else
+      @input.val value
 
   # Annotator.Editor callback function. Updates the annotation field with the
   # data retrieved from the @input property.

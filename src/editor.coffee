@@ -254,7 +254,7 @@ class Annotator.Editor extends Annotator.Widget
     switch (field.type)
       when 'textarea'          then input = $('<textarea />')
       when 'input', 'checkbox' then input = $('<input />')
-      when 'select' then input = $('<select />')
+      when 'select'            then input = $('<select />')
 
     element.append(input);
 
