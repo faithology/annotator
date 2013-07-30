@@ -18,6 +18,15 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
     stringifyTags: (array) ->
       array.join(" ")
 
+    # Configurable object that contains the tag API routes
+    urls:
+      read:    '/tags'
+
+    # prefix prepended to all api call urls
+    prefix: ''
+
+    availableTags: []
+
   # The field element added to the Annotator.Editor wrapped in jQuery. Cached to
   # save having to recreate it everytime the editor is displayed.
   field: null
@@ -34,8 +43,15 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
   pluginInit: ->
     return unless Annotator.supported()
 
+    url = if @options.prefix? then @options.prefix else ''
+    url += @options.urls.read
+
+    $.get url, (data) ->
+      if data.ok and data.tags.length
+        @options.availableTags = data.tags
+
     @field = @annotator.editor.addField({
-      label:  Annotator._t('Add some tags here') + '\u2026'
+      label:  Annotator._t('Enter a folder name') + '\u2026'
       load:   this.updateField
       submit: this.setAnnotationTags
     })
