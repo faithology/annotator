@@ -10,22 +10,24 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
       string = $.trim(string)
 
       tags = []
-      tags = string.split(/\s+/) if string
+      tags = string.split(/,\s+/) if string
       tags
 
     # Configurable function which accepts an array of tags and
     # returns a string which will be used to fill the tags input.
     stringifyTags: (array) ->
-      array.join(" ")
+      array.join(", ")
 
     # Configurable object that contains the tag API routes
     urls:
-      read:    '/tags'
+      read: '/tags'
 
     # prefix prepended to all api call urls
     prefix: ''
 
     availableTags: []
+
+  previousTag: ''
 
   # The field element added to the Annotator.Editor wrapped in jQuery. Cached to
   # save having to recreate it everytime the editor is displayed.
@@ -186,6 +188,7 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
 #   Tags.filterCallback('cat dog', ['cat']) //=> false
 #
 # Returns true if the input keywords match all tags.
+###
 Annotator.Plugin.Tags.filterCallback = (input, tags = []) ->
   matches  = 0
   keywords = []
@@ -195,3 +198,4 @@ Annotator.Plugin.Tags.filterCallback = (input, tags = []) ->
       matches += 1 for tag in tags when tag.indexOf(keyword) != -1
 
   matches == keywords.length
+###
