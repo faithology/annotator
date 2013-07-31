@@ -16,7 +16,7 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
     # Configurable function which accepts an array of tags and
     # returns a string which will be used to fill the tags input.
     stringifyTags: (array) ->
-      array.join(", ")
+      array.join(', ')
 
     # Configurable object that contains the tag API routes
     urls:
@@ -27,7 +27,7 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
 
     availableTags: []
 
-  previousTag: ''
+  previousTags: []
 
   # The field element added to the Annotator.Editor wrapped in jQuery. Cached to
   # save having to recreate it everytime the editor is displayed.
@@ -116,9 +116,8 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
   #
   # Returns nothing.
   updateField: (field, annotation) =>
-    value = ''
+    value = this.stringifyTags(@previousTags) # default value to the previously selected tags
     value = this.stringifyTags(annotation.tags) if annotation.tags
-    value = 'Default' if value == ''
 
     if @input.is('select')
       @input.empty()
@@ -149,6 +148,7 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
   # Returns nothing.
   setAnnotationTags: (field, annotation) =>
     annotation.tags = this.parseTags(@input.val())
+    @previousTags = annotation.tags
 
   # Annotator.Viewer callback function. Updates the annotation display with tags
   # removes the field from the Viewer if there are no tags to display.
