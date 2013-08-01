@@ -68,7 +68,7 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
         '<span class="annotator-color-option ' + className + ' ' + active + '" style="background-color: ' + colorWithNoTransparency + '" data-color="' + color + '"></span>'
       ).join(' ')
 
-      colors = '<div class="annotator-color-options"><p>Select the highlight color.</p>' + colors + '</div>'
+      colors = '<div class="annotator-color-options">' + colors + '</div>'
 
       @input.after(colors);
     else
