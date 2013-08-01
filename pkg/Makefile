@@ -25,13 +25,15 @@ PLUGINS=\
 	plugin/tags.coffee \
 	plugin/unsupported.coffee \
 	plugin/marginviewer.coffee \
-	plugin/colors.coffee
+	plugin/colors.coffee \
+	plugin/title.coffee
 
 ANNOTATOR_FULL=\
 	$(ANNOTATOR) \
 	plugin/store.coffee \
 	plugin/colors.coffee \
-	plugin/tags.coffee
+	plugin/tags.coffee \
+	plugin/title.coffee
 
 BOOKMARKLET=\
 	$(ANNOTATOR) \
