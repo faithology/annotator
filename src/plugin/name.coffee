@@ -26,7 +26,7 @@ class Annotator.Plugin.Name extends Annotator.Plugin
 
     @annotator.viewer.addField
       load: this.updateViewer
-
+      prepend: true
 
     @input = $(@field).find(':input')
 

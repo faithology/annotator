@@ -186,12 +186,21 @@ class Annotator.Viewer extends Annotator.Widget
   #
   # Returns itself.
   addField: (options) ->
+    prepend = false
+    prepend = true if options.prepend
+
+    delete options.prepend
+
     field = $.extend({
       load: ->
     }, options)
 
     field.element = $('<div />')[0]
-    @fields.push field
+    if prepend
+      @fields.unshift field
+    else
+      @fields.push field
+
     field.element
     this
 
