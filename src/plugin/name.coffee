@@ -1,4 +1,7 @@
 class Annotator.Plugin.Name extends Annotator.Plugin
+  options:
+    defaultName: 'Article Annotation'
+
   # The field element added to the Annotator.Editor wrapped in jQuery. Cached to
   # save having to recreate it everytime the editor is displayed.
   field: null
@@ -32,7 +35,8 @@ class Annotator.Plugin.Name extends Annotator.Plugin
 
   # updates the field
   updateField: (field, annotation) =>
-    value = annotation.name
+    value = @options.defaultName
+    value = annotation.name if annotation.name && annotation.name != ''
     @input.val value
 
   # updates the annotation when the name is updated

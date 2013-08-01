@@ -81,7 +81,7 @@ class Annotator.Editor extends Annotator.Widget
     this.checkOrientation()
 
     # give main textarea focus
-    @element.find(":input:first").focus()
+    @element.find("textarea:first").focus()
 
     this.setupDraggables()
 
