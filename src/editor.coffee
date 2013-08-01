@@ -3,14 +3,11 @@ class Annotator.Editor extends Annotator.Widget
 
   # Events to be bound to @element.
   events:
-    "form submit":                      "submit"
-    ".annotator-save click":            "submit"
-    ".annotator-cancel click":          "hide"
-    ".annotator-cancel mouseover":      "onCancelButtonMouseover"
-    "textarea keydown":                 "processKeypress"
-    "show": "_onHighlightClick"
-    ".annotator-menu .highlight click": "_onHighlightClick"
-    ".annotator-menu .note click":      "_onNoteClick"
+    "form submit":                 "submit"
+    ".annotator-save click":       "submit"
+    ".annotator-cancel click":     "hide"
+    ".annotator-cancel mouseover": "onCancelButtonMouseover"
+    "textarea keydown":            "processKeypress"
 
   # Classes to toggle state.
   classes:
@@ -21,16 +18,6 @@ class Annotator.Editor extends Annotator.Widget
   html: """
         <div class="annotator-outer annotator-editor">
           <form class="annotator-widget">
-            <ul class="annotator-menu">
-              <li class="highlight active">
-                <span class='icon ficon-highlighter'></span>
-                <span class='text'>Highlight</span>
-              </li>
-              <li class="note">
-                <span class='icon ficon-note'></span>
-                <span class='text'>Note</span>
-              </li>
-            </ul>
             <ul class="annotator-listing"></ul>
             <div class="annotator-controls">
               <a href="#cancel" class="annotator-cancel ficon-close" title="cancel"></a>
@@ -390,18 +377,3 @@ class Annotator.Editor extends Annotator.Widget
 
     resize.bind   'mousedown', onMousedown
     controls.bind 'mousedown', onMousedown
-
-  _hideFormElements: () ->
-    @element.find('.annotator-item').not('.annotator-item-quote').hide()
-    @element.find('.annotator-item.tags').show()
-    @element.find('.annotator-menu li').removeClass 'active'
-
-  _onHighlightClick: () ->
-    @_hideFormElements()
-    @element.find('.annotator-menu .highlight').addClass 'active'
-    @element.find('.annotator-color-options').parent().show()
-
-  _onNoteClick: () ->
-    @_hideFormElements()
-    @element.find('.annotator-menu .note').addClass 'active'
-    @element.find('textarea').parent().show()
