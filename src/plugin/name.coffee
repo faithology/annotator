@@ -1,4 +1,4 @@
-class Annotator.Plugin.Title extends Annotator.Plugin
+class Annotator.Plugin.Name extends Annotator.Plugin
   # The field element added to the Annotator.Editor wrapped in jQuery. Cached to
   # save having to recreate it everytime the editor is displayed.
   field: null
@@ -15,34 +15,35 @@ class Annotator.Plugin.Title extends Annotator.Plugin
   pluginInit: ->
     return unless Annotator.supported()
 
-    @field = @annotator.editor.addField({
-      label:  Annotator._t('Enter a title')
+    @field = @annotator.editor.addField
+      label:  Annotator._t('Enter a name for this annotation')
       load:   this.updateField
-      submit: this.setAnnotationTitle
-    })
+      submit: this.setAnnotationName
+      prepend: true
 
-    $(@field).addClass 'title'
 
-    @annotator.viewer.addField({
+    $(@field).addClass 'name'
+
+    @annotator.viewer.addField
       load: this.updateViewer
-    })
+
 
     @input = $(@field).find(':input')
 
   # updates the field
   updateField: (field, annotation) =>
-    value = annotation.title
+    value = annotation.name
     @input.val value
 
-  # updates the annotation when the title is updated
-  setAnnotationTitle: (field, annotation) =>
-    annotation.title = @input.val()
+  # updates the annotation when the name is updated
+  setAnnotationName: (field, annotation) =>
+    annotation.name = @input.val()
 
-  # updates the annotation title in the viewer
+  # updates the annotation name in the viewer
   updateViewer: (field, annotation) ->
     field = $(field)
 
-    if annotation.title
-      field.addClass('annotator-title').html annotation.title
+    if annotation.name
+      field.addClass('annotator-name').html annotation.name
     else
       field.remove()

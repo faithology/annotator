@@ -10,15 +10,15 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     'annotationUpdatedFromStore'   : '_setHighlight'
 
   options:
-    defaultColor: 'transparent'
+    defaultColor: 'rgba(255, 255, 0, 0.3)'
     colorOptions: [
-      'transparent',
       'rgba(255, 255, 0, 0.3)',   # yellow
       'rgba(255, 89, 0, 0.3)',    # orange
       'rgba(255, 107, 247, 0.3)', # pink
       'rgba(0, 230, 0, 0.3)',     # green
       'rgba(0, 64, 255, 0.3)',    # blue
       'rgba(128, 0, 128, 0.3)'    # purple
+      'transparent',
     ],
     currentArticleVersion: ''
     userHasBeenAlertedOfVersionChange: false
@@ -37,15 +37,14 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   pluginInit: ->
     return unless Annotator.supported()
 
-    @field = @annotator.editor.addField({
+    @field = @annotator.editor.addField
       label:  Annotator._t('Choose a color') + '\u2026'
       load:   this.updateField
       submit: this.setAnnotationColor
-    })
+      prepend: true
 
-    @annotator.viewer.addField({
+    @annotator.viewer.addField
       load: this.updateViewer
-    })
 
     @input = $(@field).find(':input')
 

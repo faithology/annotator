@@ -226,6 +226,11 @@ class Annotator.Editor extends Annotator.Widget
   #
   # Returns the created <li> Element.
   addField: (options) ->
+    prepend = false
+    prepend = true if options.prepend
+
+    delete options.prepend
+
     field = $.extend({
       id:     'annotator-field-' + Annotator.Util.uuid()
       type:   'input'
@@ -255,7 +260,10 @@ class Annotator.Editor extends Annotator.Widget
       element.addClass('annotator-checkbox')
       element.append($('<label />', {for: field.id, html: field.label}))
 
-    @element.find('ul.annotator-listing:first').append(element)
+    if prepend
+      @element.find('ul.annotator-listing:first').prepend(element)
+    else
+      @element.find('ul.annotator-listing:last').append(element)
 
     @fields.push field
 
