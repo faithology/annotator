@@ -8,6 +8,7 @@ class Annotator.Editor extends Annotator.Widget
     ".annotator-cancel click":     "hide"
     ".annotator-cancel mouseover": "onCancelButtonMouseover"
     "textarea keydown":            "processKeypress"
+    "chosen-search keydown":       "addNewTag"
 
   # Classes to toggle state.
   classes:
@@ -265,6 +266,11 @@ class Annotator.Editor extends Annotator.Widget
     else
       @element.find('ul.annotator-listing:last').append(element)
 
+    if field.type = 'select'
+      $(".annotator-editor select").chosen
+        width: "200px"
+        no_results_text: "Press enter to create"
+
     @fields.push field
 
     field.element
@@ -292,6 +298,10 @@ class Annotator.Editor extends Annotator.Widget
     else if event.keyCode is 13 and !event.shiftKey
       # If "return" was pressed without the shift key, we're done.
       this.submit()
+
+  addNewTag: (event) =>
+    event.preventDefault()
+    console.log 'Adding new tag', event
 
   # Event callback. Removes the focus class from the submit button when the
   # cancel button is hovered.

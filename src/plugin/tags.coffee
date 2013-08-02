@@ -130,6 +130,10 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
     else
       @input.val value
 
+    $(".annotator-editor select").trigger 'chosen:updated'
+
+    @input
+
   # Annotator.Editor callback function. Updates the annotation field with the
   # data retrieved from the @input property.
   #
@@ -198,3 +202,12 @@ Annotator.Plugin.Tags.filterCallback = (input, tags = []) ->
 
   matches == keywords.length
 ###
+
+window.newTag = (newTag) ->
+  console.log "newTag", newTag
+  $select = $(".annotator-editor select")
+  $select.find("option:selected").removeAttr("selected");
+  $option = $('<option />').text(newTag).attr 'name', newTag
+  $option.attr 'selected', 'selected'
+  $select.append $option
+  $select.trigger 'chosen:updated'
