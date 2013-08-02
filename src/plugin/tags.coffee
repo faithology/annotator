@@ -204,7 +204,6 @@ Annotator.Plugin.Tags.filterCallback = (input, tags = []) ->
 ###
 
 window.newTag = (newTag) ->
-  console.log "newTag", newTag
   $select = $(".annotator-editor select")
   $select.find("option:selected").removeAttr("selected");
   $option = $('<option />').text(newTag).attr 'name', newTag
