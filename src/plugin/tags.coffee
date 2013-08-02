@@ -55,7 +55,6 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
         options.availableTags = data.tags
 
     @field = @annotator.editor.addField({
-      label:  Annotator._t('Enter a folder name')
       type:   'select'
       load:   this.updateField
       submit: this.setAnnotationTags
