@@ -178,6 +178,9 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
     else
       field.remove()
 
+  addNewAvailableTag: (tagName) =>
+    @options.availableTags.push tagName
+
 # Checks an input string of keywords against an array of tags. If the keywords
 # match _all_ tags the function returns true. This should be used as a callback
 # in the Filter plugin.
@@ -203,9 +206,16 @@ Annotator.Plugin.Tags.filterCallback = (input, tags = []) ->
   matches == keywords.length
 ###
 
-window.newTag = (newTag) ->
+#
+# Function called by chosen to add a new tag
+#
+window.newAnnotatorTag = (newTag) ->
+  #
+  # @TODO update Annotator.tags.options.availableTags with this new tag
+  #
+
   $select = $(".annotator-editor select")
-  $select.find("option:selected").removeAttr("selected");
+  $select.find("option:selected").removeAttr "selected"
   $option = $('<option />').text(newTag).attr 'name', newTag
   $option.attr 'selected', 'selected'
   $select.append $option
