@@ -25,7 +25,7 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
     # prefix prepended to all api call urls
     prefix: ''
 
-    availableTags: []
+    availableTags: {}
 
   previousTags: []
 
@@ -48,11 +48,17 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
     url = if @options.prefix? then @options.prefix else ''
     url += @options.urls.read
 
-    options = @options
+    _options = @options
 
     $.get url, (data) ->
       if data.ok and data.tags.length
-        options.availableTags = data.tags
+        tags = {}
+
+        # create id/name lookup table
+        data.tags.forEach (tag) ->
+          tags[tag._id.toString()] = tag.name
+
+        _options.availableTags = tags
 
     @field = @annotator.editor.addField({
       type:   'select'
@@ -70,8 +76,8 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
     if @annotator.plugins.Filter
       @annotator.plugins.Filter.addFilter
         label: Annotator._t('Tag')
-        property: 'tags'
-        isFiltered: Annotator.Plugin.Tags.filterCallback
+        property: 'tag_ids'
+        isFiltered: Annotator.Plugin.Tags.filterCallbacks
 
     @input = $(@field).find(':input')
 
@@ -116,15 +122,15 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
   # Returns nothing.
   updateField: (field, annotation) =>
     value = this.stringifyTags(@previousTags) # default value to the previously selected tags
-    value = this.stringifyTags(annotation.tags) if annotation.tags
+    value = this.stringifyTags(annotation.tag_ids) if annotation.tag_ids
 
     if @input.is('select')
       @input.empty()
       thisInput = @input
 
-      @options.availableTags.forEach (tag) ->
-        option = $('<option />').text(tag).attr 'name', tag
-        option.attr 'selected', 'selected' if tag == value
+      for id, tag of @options.availableTags
+        option = $('<option />').text(tag).attr 'value', id
+        option.attr 'selected', 'selected' if id == value
         thisInput.append option
 
     else
@@ -150,8 +156,8 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
   #
   # Returns nothing.
   setAnnotationTags: (field, annotation) =>
-    annotation.tags = this.parseTags(@input.val())
-    @previousTags = annotation.tags
+    annotation.tag_ids = this.parseTags(@input.val())
+    @previousTags = annotation.tag_ids
 
   # Annotator.Viewer callback function. Updates the annotation display with tags
   # removes the field from the Viewer if there are no tags to display.
@@ -166,20 +172,26 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
   #   field.innerHTML # => Returns '<span class="annotator-tag">apples</span>'
   #
   # Returns nothing.
-  updateViewer: (field, annotation) ->
+  updateViewer: (field, annotation) =>
     field = $(field)
 
-    if annotation.tags and $.isArray(annotation.tags) and annotation.tags.length
+    _options = @options
+
+    if annotation.tag_ids and $.isArray(annotation.tag_ids) and annotation.tag_ids.length
       field.addClass('annotator-tags').html(->
-        string = $.map(annotation.tags,(tag) ->
-            '<span class="annotator-tag">' + Annotator.Util.escape(tag) + '</span>'
+        string = $.map(annotation.tag_ids,(tag) ->
+          if _options.availableTags[tag]
+            tagText = _options.availableTags[tag]
+          else
+            tagText = tag
+          '<span class="annotator-tag">' + Annotator.Util.escape(tagText) + '</span>'
         ).join(' ')
       )
     else
       field.remove()
 
   addNewAvailableTag: (tagName) =>
-    @options.availableTags.push tagName
+    @options.availableTags[tagName] = tagName
 
 # Checks an input string of keywords against an array of tags. If the keywords
 # match _all_ tags the function returns true. This should be used as a callback
@@ -216,7 +228,7 @@ window.newAnnotatorTag = (newTag) ->
 
   $select = $(".annotator-editor select")
   $select.find("option:selected").removeAttr "selected"
-  $option = $('<option />').text(newTag).attr 'name', newTag
+  $option = $('<option />').text(newTag).attr 'value', newTag
   $option.attr 'selected', 'selected'
   $select.append $option
   $select.trigger 'chosen:updated'
