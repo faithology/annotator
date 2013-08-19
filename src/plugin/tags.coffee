@@ -1,6 +1,10 @@
 # Public: Tags plugin allows users to tag thier annotations with metadata
 # stored in an Array on the annotation as tags.
 class Annotator.Plugin.Tags extends Annotator.Plugin
+  events:
+    'annotationCreated' : 'fetchTags'
+    'annotationUpdated' : 'fetchTags'
+    'annotationsLoaded' : 'fetchTags'
 
   options:
     # Configurable function which accepts a string (the contents)
@@ -44,21 +48,6 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
   # Returns nothing.
   pluginInit: ->
     return unless Annotator.supported()
-
-    url = if @options.prefix? then @options.prefix else ''
-    url += @options.urls.read
-
-    _options = @options
-
-    $.get url, (data) ->
-      if data.ok and data.tags.length
-        tags = {}
-
-        # create id/name lookup table
-        data.tags.forEach (tag) ->
-          tags[tag._id.toString()] = tag.name
-
-        _options.availableTags = tags
 
     @field = @annotator.editor.addField({
       type:   'select'
@@ -193,6 +182,25 @@ class Annotator.Plugin.Tags extends Annotator.Plugin
   addNewAvailableTag: (tagName) =>
     @options.availableTags[tagName] = tagName
 
+  fetchTags: () =>
+    _options = @options
+
+    setTimeout (->
+      url = if _options.prefix? then _options.prefix else ''
+      url += _options.urls.read
+
+      $.get url, (data) ->
+        if data.ok and data.tags.length
+          tags = {}
+
+          # create id/name lookup table
+          data.tags.forEach (tag) ->
+            tags[tag._id.toString()] = tag.name
+
+          _options.availableTags = tags
+    ), 500
+
+
 # Checks an input string of keywords against an array of tags. If the keywords
 # match _all_ tags the function returns true. This should be used as a callback
 # in the Filter plugin.
@@ -230,6 +238,8 @@ window.newAnnotatorTag = (newTag) ->
   $select.trigger 'chosen:updated'
   $select.closest('.annotator-widget').find('textarea').click()
 
+  ###
   $('.article-paragraphs').each ->
     if $(this).data('annotator')
-      $(this).data('annotator').plugins['Tags'].addNewAvailableTag newTag
+      $(this).data('annotator').plugins['Tags'].fetchTags()
+  ###
