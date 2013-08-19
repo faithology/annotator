@@ -222,13 +222,14 @@ Annotator.Plugin.Tags.filterCallback = (input, tags = []) ->
 # Function called by chosen to add a new tag
 #
 window.newAnnotatorTag = (newTag) ->
-  #
-  # @TODO update Annotator.tags.options.availableTags with this new tag
-  #
-
   $select = $(".annotator-editor select")
   $select.find("option:selected").removeAttr "selected"
   $option = $('<option />').text(newTag).attr 'value', newTag
   $option.attr 'selected', 'selected'
   $select.append $option
   $select.trigger 'chosen:updated'
+  $select.closest('.annotator-widget').find('textarea').click()
+
+  $('.article-paragraphs').each ->
+    if $(this).data('annotator')
+      $(this).data('annotator').plugins['Tags'].addNewAvailableTag newTag
