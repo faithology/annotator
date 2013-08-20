@@ -106,7 +106,7 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
           @options.userHasBeenAlertedOfVersionChange = true;
           # alert the user that this annotation references a different version of the article
           # console.log 'Article has changed: ', annotation
-          Annotator.showNotification('Article has changed. Review your annotations.', Annotator.Notification.ERROR)
+          window.disableAnnotations(annotation.article_version)
 
       text = annotation.text
       color = annotation.color
