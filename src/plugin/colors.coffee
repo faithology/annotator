@@ -101,11 +101,12 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     id = annotation.id
 
     if id
-      if @options.currentArticleVersion.toString() != annotation.article_version.toString() and not @options.userHasBeenAlertedOfVersionChange
-        @options.userHasBeenAlertedOfVersionChange = true;
-        # alert the user that this annotation references a different version of the article
-        # console.log 'Article has changed: ', annotation
-        Annotator.showNotification('Article has changed. Review your annotations.', Annotator.Notification.ERROR)
+      if @options.currentArticleVersion
+        if @options.currentArticleVersion.toString() != annotation.article_version.toString() and not @options.userHasBeenAlertedOfVersionChange
+          @options.userHasBeenAlertedOfVersionChange = true;
+          # alert the user that this annotation references a different version of the article
+          # console.log 'Article has changed: ', annotation
+          Annotator.showNotification('Article has changed. Review your annotations.', Annotator.Notification.ERROR)
 
       text = annotation.text
       color = annotation.color
