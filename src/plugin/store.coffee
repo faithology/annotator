@@ -244,6 +244,12 @@ class Annotator.Plugin.Store extends Annotator.Plugin
           $(h).replaceWith(h.childNodes)
 
     $('.annotation-note').remove()
+
+    # sometimes there are straglers
+    setTimeout (->
+      $('.annotation-note').remove()
+    ), 500
+
     @annotations = []
 
 
