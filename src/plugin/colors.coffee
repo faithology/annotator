@@ -116,7 +116,7 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
       if color
         $(annotation.highlights).css('background-color', color).addClass @slugify(color)
 
-      $(annotation.highlights).addClass(id).removeClass 'has-note'
+      $(annotation.highlights).data('id', id).addClass(id).removeClass 'has-note'
 
       @element.find('.annotation-note.' + id).remove()
 
