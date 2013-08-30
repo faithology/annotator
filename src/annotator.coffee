@@ -564,6 +564,10 @@ class Annotator extends Delegator
   checkForEndSelection: (event) =>
     @mouseIsDown = false
 
+    # Allow disabling annotations
+    if $(".article-paragraphs.disabled-annotations").length
+      return
+
     # This prevents the note image from jumping away on the mouseup
     # of a click on icon.
     if @ignoreMouseup
