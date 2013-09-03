@@ -565,7 +565,7 @@ class Annotator extends Delegator
     @mouseIsDown = false
 
     # Allow disabling annotations
-    if $(".article-paragraphs.disabled-annotations").length
+    if $(".article-paragraphs.disabled-annotations").length && !$('.track-article-changes').length
       return
 
     # This prevents the note image from jumping away on the mouseup
