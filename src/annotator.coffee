@@ -21,6 +21,7 @@ class Annotator extends Delegator
 
   options: # Configuration options
     readOnly: false # Start Annotator in read-only mode. No controls will be shown.
+    selector: false
 
   plugins: {}
 
@@ -564,10 +565,6 @@ class Annotator extends Delegator
   checkForEndSelection: (event) =>
     @mouseIsDown = false
 
-    # Allow disabling annotations
-    if $(".article-paragraphs.disabled-annotations").length && !$('.track-article-changes').length
-      return
-
     # This prevents the note image from jumping away on the mouseup
     # of a click on icon.
     if @ignoreMouseup
@@ -592,6 +589,11 @@ class Annotator extends Delegator
       return if this.isAnnotator(container)
 
     if event and @selectedRanges.length
+
+      # Allow disabling annotations
+      if $(".article-paragraphs.disabled-annotations").length && !$('.track-article-changes').length
+        return
+
       # showing the adder briefly so the position for the editor will be correct
       @adder.css(Util.mousePosition(event, @wrapper[0])).show()
 
