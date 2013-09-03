@@ -578,9 +578,7 @@ class Annotator extends Delegator
 
     # if there is a selection, remove the tooltips as to not interfere with the ranges
     if event and @selectedRanges.length
-      $('.article-paragraphs .tooltip').not('.superscript').each ->
-        $(this).find('.tooltip-content').remove()
-        $(this).find('.link-text').addClass('needs-tooltip').unwrap()
+      window.untooltipify(false)
 
       @selectedRanges = this.getSelectedRanges()
 
