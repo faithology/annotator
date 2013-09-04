@@ -640,10 +640,7 @@ class Annotator extends Delegator
 
     mousePosition = Util.mousePosition(event, @wrapper[0])
 
-    console.log ''
-
     annotationsArray = []
-
 
     # Hover on the note icon
     if mousePosition.left < 0
