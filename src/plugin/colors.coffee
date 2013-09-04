@@ -23,6 +23,9 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     currentArticleVersion: ''
     userHasBeenAlertedOfVersionChange: false
 
+  # Keep track of note postition in order to indicate multiple notes on the same line
+  notePositions: {}
+
   # The field element added to the Annotator.Editor wrapped in jQuery. Cached to
   # save having to recreate it everytime the editor is displayed.
   field: null
@@ -128,11 +131,25 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
         $(annotation.highlights).addClass 'has-note'
 
         if highlightPosition
-          $noteIcon = $('<a class="annotation-note ficon-note ' + id + '" data-id="' + id + '" href="#"></a>').css 'top', highlightPosition.top
-          $noteIcon.mouseover @_onNoteIconHover
-          $noteIcon.mouseout @_onNoteIconHover
-          $noteIcon.click @_onNoteIconClick
-          @element.append $noteIcon
+
+          # do we have multiple notes on one line?
+          if @notePositions[highlightPosition.top]
+            $noteIcon = @notePositions[highlightPosition.top]
+
+            parsedInt = parseInt $noteIcon.find('span').text(), 10
+
+            if $noteIcon.find('span').length
+              $noteIcon.find('span').text ++parsedInt
+            else
+              $noteIcon.html '<span>2</span>'
+
+          else
+            $noteIcon = $('<a class="annotation-note ficon-note ' + id + '" data-id="' + id + '" href="#"></a>').css 'top', highlightPosition.top
+            $noteIcon.mouseover @_onNoteIconHover
+            $noteIcon.mouseout @_onNoteIconHover
+            $noteIcon.click @_onNoteIconClick
+            @notePositions[highlightPosition.top] = $noteIcon
+            @element.append $noteIcon
 
     annotation
 
