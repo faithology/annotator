@@ -86,13 +86,7 @@ Util.escape = (html) ->
 
 Util.uuid = (-> counter = 0; -> counter++)()
 
-Util.getGlobal = ->
-  (->
-    if $('.nyroModalCont').length
-      $('.nyroModalCont')
-    else
-      this
-  )()
+Util.getGlobal = -> (-> this )()
 
 # Return the maximum z-index of any element in $elements (a jQuery collection).
 Util.maxZIndex = ($elements) ->
