@@ -108,10 +108,14 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
           # console.log 'Article has changed: ', annotation
           window.disableAnnotations annotation.article_version, @options.currentArticleVersion
 
-      text = annotation.text
-      color = annotation.color
-      $lastHighlight = $(annotation.highlights).last()
+      text              = annotation.text
+      color             = annotation.color
+      $lastHighlight    = $(annotation.highlights).first()
       highlightPosition = $lastHighlight.position()
+
+      if highlightPosition && highlightPosition.top == 0 && highlightPosition.left == 0
+        $lastHighlight    = $(annotation.highlights).last()
+        highlightPosition = $lastHighlight.position()
 
       if color
         $(annotation.highlights).css('background-color', color).addClass @slugify(color)
