@@ -135,7 +135,10 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
           # do we have multiple notes on one line?
           if @notePositions[highlightPosition.top]
             $noteIcon = @notePositions[highlightPosition.top]
-            $noteIcon.data('id', $noteIcon.data('id') + ',' + id)
+            ids = $noteIcon.data('id') + ' ' + id
+            $noteIcon.data('id', ids)
+            $noteIcon.addClass id
+            $noteIcon.addClass 'multiple'
 
             if $noteIcon.find('span').length
               parsedInt = parseInt $noteIcon.find('span').text(), 10
@@ -168,12 +171,7 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     @input.val color
 
   _onNoteIconHover: (event) =>
-    ids = $(event.target).data 'id'
-
-    if ids.indexOf(',') != -1
-      ids = ids.split ','
-    else
-      ids = [ids]
+    ids = $(event.target).data('id').split ' '
 
     ids.forEach (id) ->
       $highlight = $('.annotator-hl.' + id)

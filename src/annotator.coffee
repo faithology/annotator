@@ -638,12 +638,34 @@ class Annotator extends Delegator
     # already displaying the viewer
     return false if @mouseIsDown or @viewer.isShown()
 
-    annotations = $(e.target)
-      .parents('.annotator-hl')
-      .andSelf()
-      .map -> return $(this).data("annotation")
+    mousePosition = Util.mousePosition(event, @wrapper[0])
 
-    this.showViewer($.makeArray(annotations), Util.mousePosition(event, @wrapper[0]))
+    console.log ''
+
+    annotationsArray = []
+
+
+    # Hover on the note icon
+    if mousePosition.left < 0
+      $note = $('.annotation-note.' + $(e.target).data('id'))
+      ids = $note.data('id').split(' ')
+      console.log 'other ids to hover', ids
+
+      ids.forEach (id) ->
+        console.log $('.annotator-hl.' + id).first()
+
+        annotationsArray.push $('.annotator-hl.' + id).first().data 'annotation'
+
+    else
+      annotations = $(e.target)
+        .parents('.annotator-hl')
+        .andSelf()
+        .map -> return $(this).data('annotation')
+      annotationsArray = $.makeArray annotations
+
+    console.log annotationsArray
+
+    this.showViewer(annotationsArray, mousePosition)
 
   # Annotator#element callback. Sets @ignoreMouseup to true to prevent
   # the annotation selection events firing when the adder is clicked.
