@@ -135,10 +135,10 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
           # do we have multiple notes on one line?
           if @notePositions[highlightPosition.top]
             $noteIcon = @notePositions[highlightPosition.top]
-
-            parsedInt = parseInt $noteIcon.find('span').text(), 10
+            $noteIcon.data('id', $noteIcon.data('id') + ',' + id)
 
             if $noteIcon.find('span').length
+              parsedInt = parseInt $noteIcon.find('span').text(), 10
               $noteIcon.find('span').text ++parsedInt
             else
               $noteIcon.html '<span>2</span>'
@@ -168,16 +168,23 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
     @input.val color
 
   _onNoteIconHover: (event) =>
-    id = $(event.target).data 'id'
-    $lastHighlight = $('.annotator-hl.' + id).last()
+    ids = $(event.target).data 'id'
 
-    switch event.type
-      when 'mouseout'
-        $('.annotator-hl.' + id).removeClass 'hovering'
-      when 'mouseover'
-        $('.annotator-hl.' + id).addClass 'hovering'
+    if ids.indexOf(',') != -1
+      ids = ids.split ','
+    else
+      ids = [ids]
 
-    $lastHighlight.trigger event.type, event
+    ids.forEach (id) ->
+      $highlight = $('.annotator-hl.' + id)
+
+      switch event.type
+        when 'mouseout'
+          $highlight.removeClass 'hovering'
+        when 'mouseover'
+          $highlight.addClass 'hovering'
+
+      $highlight.first().trigger event.type, event
 
   _onNoteIconClick: (event) ->
     event?.preventDefault?()
