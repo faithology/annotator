@@ -646,11 +646,8 @@ class Annotator extends Delegator
     if mousePosition.left < 0
       $note = $('.annotation-note.' + $(e.target).data('id'))
       ids = $note.data('id').split(' ')
-      console.log 'other ids to hover', ids
 
       ids.forEach (id) ->
-        console.log $('.annotator-hl.' + id).first()
-
         annotationsArray.push $('.annotator-hl.' + id).first().data 'annotation'
 
     else
@@ -659,8 +656,6 @@ class Annotator extends Delegator
         .andSelf()
         .map -> return $(this).data('annotation')
       annotationsArray = $.makeArray annotations
-
-    console.log annotationsArray
 
     this.showViewer(annotationsArray, mousePosition)
 
