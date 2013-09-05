@@ -128,26 +128,24 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
         if text
           $(annotation.highlights).addClass 'has-note'
 
-          if highlightPosition
+          # do we have multiple notes on one line?
+          if highlightPosition && @notePositions[highlightPosition.top]
+            $noteIcon = @notePositions[highlightPosition.top]
+            ids = $noteIcon.data('id') + ' ' + id
+            $noteIcon.data('id', ids)
+            $noteIcon.addClass id
 
-            # do we have multiple notes on one line?
-            if @notePositions[highlightPosition.top]
-              $noteIcon = @notePositions[highlightPosition.top]
-              ids = $noteIcon.data('id') + ' ' + id
-              $noteIcon.data('id', ids)
-              $noteIcon.addClass id
+            numberOfIds = ids.split(' ').length
 
-              numberOfIds = ids.split(' ').length
+            @_updateNote $noteIcon, numberOfIds
 
-              @_updateNote $noteIcon, numberOfIds
-
-            else
-              $noteIcon = $('<a class="annotation-note ficon-note ' + id + '" data-id="' + id + '" href="#"></a>').css 'top', highlightPosition.top
-              $noteIcon.mouseover @_onNoteIconHover
-              $noteIcon.mouseout @_onNoteIconHover
-              $noteIcon.click @_onNoteIconClick
-              @notePositions[highlightPosition.top] = $noteIcon
-              @element.append $noteIcon
+          else
+            $noteIcon = $('<a class="annotation-note ficon-note ' + id + '" data-id="' + id + '" href="#"></a>').css 'top', highlightPosition.top
+            $noteIcon.mouseover @_onNoteIconHover
+            $noteIcon.mouseout @_onNoteIconHover
+            $noteIcon.click @_onNoteIconClick
+            @notePositions[highlightPosition.top] = $noteIcon
+            @element.append $noteIcon
 
     annotation
 
