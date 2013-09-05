@@ -103,6 +103,10 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   _setHighlight: (annotation) =>
     id = annotation.id
 
+    if @element.find('.annotation-note').length == 0
+      @notePositions = {}
+
+
     if id
       if annotation.article_version.toString() && annotation.article_version.toString() != 'false' && @options.currentArticleVersion
         if @options.currentArticleVersion.toString() != annotation.article_version.toString() and not @options.userHasBeenAlertedOfVersionChange
