@@ -108,61 +108,70 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
         if @options.currentArticleVersion.toString() != annotation.article_version.toString() and not @options.userHasBeenAlertedOfVersionChange
           @options.userHasBeenAlertedOfVersionChange = true;
           # alert the user that this annotation references a different version of the article
-          # console.log 'Article has changed: ', annotation
           window.disableAnnotations annotation.article_version, @options.currentArticleVersion
 
       text              = annotation.text
       color             = annotation.color
-      $lastHighlight    = $(annotation.highlights).first()
-      highlightPosition = $lastHighlight.position()
-
-      if highlightPosition && highlightPosition.top == 0 && highlightPosition.left == 0
-        $lastHighlight    = $(annotation.highlights).last()
-        highlightPosition = $lastHighlight.position()
+      highlightPosition = @_getHighlightPosition annotation
 
       if color
         $(annotation.highlights).css('background-color', color).addClass @slugify(color)
 
       $(annotation.highlights).attr('data-id', id).addClass(id).removeClass 'has-note'
 
-      @element.find('.annotation-note.' + id).remove()
+      @_removeHighlight annotation, =>
 
-      if text
-        $(annotation.highlights).addClass 'has-note'
+        if text
+          $(annotation.highlights).addClass 'has-note'
 
-        if highlightPosition
+          if highlightPosition
 
-          # do we have multiple notes on one line?
-          if @notePositions[highlightPosition.top]
-            $noteIcon = @notePositions[highlightPosition.top]
-            ids = $noteIcon.data('id') + ' ' + id
-            $noteIcon.data('id', ids)
-            $noteIcon.addClass id
-            $noteIcon.addClass 'multiple'
+            # do we have multiple notes on one line?
+            if @notePositions[highlightPosition.top]
+              $noteIcon = @notePositions[highlightPosition.top]
+              ids = $noteIcon.data('id') + ' ' + id
+              $noteIcon.data('id', ids)
+              $noteIcon.addClass id
 
-            if $noteIcon.find('span').length
-              parsedInt = parseInt $noteIcon.find('span').text(), 10
-              $noteIcon.find('span').text ++parsedInt
+              numberOfIds = ids.split(' ').length
+
+              @_updateNote $noteIcon, numberOfIds
+
             else
-              $noteIcon.html '<span>2</span>'
-
-          else
-            $noteIcon = $('<a class="annotation-note ficon-note ' + id + '" data-id="' + id + '" href="#"></a>').css 'top', highlightPosition.top
-            $noteIcon.mouseover @_onNoteIconHover
-            $noteIcon.mouseout @_onNoteIconHover
-            $noteIcon.click @_onNoteIconClick
-            @notePositions[highlightPosition.top] = $noteIcon
-            @element.append $noteIcon
+              $noteIcon = $('<a class="annotation-note ficon-note ' + id + '" data-id="' + id + '" href="#"></a>').css 'top', highlightPosition.top
+              $noteIcon.mouseover @_onNoteIconHover
+              $noteIcon.mouseout @_onNoteIconHover
+              $noteIcon.click @_onNoteIconClick
+              @notePositions[highlightPosition.top] = $noteIcon
+              @element.append $noteIcon
 
     annotation
 
-  _removeHighlight: (annotation) =>
+  _removeHighlight: (annotation, cb) =>
+    cb = cb or ->
+
     id = annotation.id
 
-    if id
-      @element.find('.annotation-note.' + id).remove()
+    if id and @element.find('.annotation-note.' + id).length
+      $noteIcon = @element.find('.annotation-note.' + id)
 
-    annotation
+      ids = $noteIcon.data('id')
+
+      regex = new RegExp id, 'ig'
+      ids = ids.replace regex, ''
+      ids = ids.replace /(  )|(^ +)|( +$)/ig, ''
+
+      $noteIcon.data 'id', ids
+      $noteIcon.addClass id
+
+      numberOfIds = 0
+      if ids.replace(/\s+/ig, '') != ''
+        numberOfIds = ids.split(' ').length
+
+      @_updateNote $noteIcon, numberOfIds, cb
+
+    else
+      cb()
 
   _onColorOptionClick: (event) ->
     color = $(event.target).data('color')
@@ -196,3 +205,25 @@ class Annotator.Plugin.Colors extends Annotator.Plugin
   # converts the string into a format that can be used as a css class
   slugify: (string) ->
     string.replace /[\W]*/g, ''
+
+  _updateNote: ($noteIcon, numberOfIds, cb) ->
+    cb = cb or ->
+
+    if numberOfIds > 1
+      $noteIcon.html '<span>' + numberOfIds + '</span>'
+    else if numberOfIds == 1
+      $noteIcon.html ''
+    else
+      if $noteIcon.position()
+        delete @notePositions[$noteIcon.position().top]
+      $noteIcon.remove()
+
+    cb()
+
+  _getHighlightPosition: (annotation) ->
+    highlightPosition = $(annotation.highlights).first().position()
+
+    if highlightPosition && highlightPosition.top == 0 && highlightPosition.left == 0
+      highlightPosition = $(annotation.highlights).last().position()
+
+    highlightPosition
